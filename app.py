@@ -1,12 +1,9 @@
 """
-🏥 Application Streamlit - Prédiction de Réponse à l'Assurance Véhicule
+🏥 Application Streamlit - Prédiction d'Assurance Véhicule
 TP2 IIA S6 - Modèles ML d'Ensemble
-
-Auteur: HLDX - Henri Ledoux SAME
-Date: 2025-2026
 =================================================================
 Interface Streamlit pour le déploiement de modèles ML d'ensemble
-Version améliorée avec design moderne et interactif
+Version avec design moderne et interactif
 
 Utilisation:
     streamlit run app.py
@@ -54,160 +51,179 @@ warnings.filterwarnings('ignore')
 # ============================================================================
 
 st.set_page_config(
-    page_title="🏥 Prédiction Assurance Véhicule - TP2",
-    page_icon="🏥",
+    page_title="🚗 Prédiction Assurance Véhicule - TP2",
+    page_icon="🚗",
     layout="wide",
     initial_sidebar_state="expanded",
     menu_items={
         'About': """
-        ## 🏥 Prédiction de Réponse à l'Assurance Véhicule
+        ## 🚗 Prédiction d'Assurance Véhicule
         
         Application de Machine Learning pour prédire si un client 
         est susceptible d'être intéressé par une assurance véhicule.
         
-        Développé par HLDX - Henri Ledoux SAME
         Version: TP2 IIA S6 2025-2026
         """
     }
 )
 
 # ============================================================================
-# STYLE CSS PERSONNALISÉ
+# STYLE CSS PERSONNALISÉ - NOUVEAU DESIGN
 # ============================================================================
 
 st.markdown("""
 <style>
     /* Import Google Fonts */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
     
-    /* Style général */
+    /* Style général - THÈME CLAIR MODERNE */
     .stApp {
-        font-family: 'Inter', sans-serif;
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
     }
     
     /* Headers principaux */
-    h1, h2, h3 {
-        font-family: 'Inter', sans-serif !important;
+    h1, h2, h3, h4 {
+        font-family: 'Poppins', sans-serif !important;
         font-weight: 600 !important;
     }
     
-    /* Couleurs personnalisées - Titre gradient */
+    /* Couleurs personnalisées - NOUVELLE PALETTE TEAL/CYAN */
     .title-gradient {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         font-weight: 700;
+        font-size: 2.5rem;
     }
     
-    /* Cartes de métriques */
-    .metric-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border-radius: 15px;
-        padding: 20px;
-        color: white;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-    }
-    
-    .metric-card-success {
-        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-        border-radius: 15px;
-        padding: 20px;
-        color: white;
-        box-shadow: 0 4px 15px rgba(17, 153, 142, 0.3);
-    }
-    
-    .metric-card-danger {
-        background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
-        border-radius: 15px;
-        padding: 20px;
-        color: white;
-        box-shadow: 0 4px 15px rgba(235, 51, 73, 0.3);
-    }
-    
-    .metric-card-warning {
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        border-radius: 15px;
-        padding: 20px;
-        color: white;
-        box-shadow: 0 4px 15px rgba(240, 147, 251, 0.3);
-    }
-    
-    /* Sidebar styling */
+    /* Nouvelle sidebar - fond clair élégant */
     section[data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #0e1117 0%, #161b22 100%);
+        background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+        border-right: 2px solid #00b894;
     }
     
-    /* Boutons */
+    /* Boutons personnalisés - Style moderne */
     .stButton>button {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
         border: none;
-        border-radius: 10px;
-        padding: 10px 25px;
-        font-weight: 500;
+        border-radius: 25px;
+        padding: 12px 30px;
+        font-weight: 600;
+        font-family: 'Poppins', sans-serif;
         transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3);
     }
     
     .stButton>button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 184, 148, 0.5);
     }
     
-    /* Cards */
-    .custom-card {
+    /* Cartes modernes avec ombres */
+    .modern-card {
         background: white;
-        border-radius: 15px;
+        border-radius: 20px;
         padding: 25px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
         margin-bottom: 20px;
+        border-left: 5px solid #00b894;
     }
     
-    /* Dark mode card */
-    .dark-card {
-        background: #161b22;
-        border-radius: 15px;
-        padding: 25px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        margin-bottom: 20px;
+    /* Cartes彩色 avec gradient */
+    .gradient-card {
+        background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+        border-radius: 20px;
+        padding: 30px;
+        color: white;
+        box-shadow: 0 10px 40px rgba(0, 184, 148, 0.3);
     }
     
-    /* Info box */
-    .info-box {
-        background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
-        border-radius: 10px;
-        padding: 15px;
-        margin: 10px 0;
+    /* Animation slide-in */
+    @keyframes slideIn {
+        from { opacity: 0; transform: translateX(-30px); }
+        to { opacity: 1; transform: translateX(0); }
     }
     
-    /* Success box */
-    .success-box {
-        background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
-        border-radius: 10px;
-        padding: 15px;
-        margin: 10px 0;
+    .slide-in {
+        animation: slideIn 0.5s ease-out;
     }
     
-    /* Animation fade-in */
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .fade-in {
-        animation: fadeIn 0.5s ease-out;
-    }
-    
-    /* Divider styling */
+    /* Divider stylisé */
     hr {
         margin: 30px 0;
         border: none;
-        height: 2px;
-        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        height: 3px;
+        background: linear-gradient(90deg, #00b894 0%, #00cec9 50%, #6c5ce7 100%);
+        border-radius: 2px;
     }
     
-    /* Metrics styling */
+    /* Metrics avec nouveau style */
+    div.stMetric {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        border: 1px solid #e9ecef;
+    }
+    
     [data-testid="stMetricValue"] {
-        font-size: 2rem !important;
+        font-size: 1.8rem !important;
         font-weight: 700 !important;
+        color: #00b894 !important;
+    }
+    
+    [data-testid="stMetricLabel"] {
+        font-size: 0.9rem !important;
+        color: #636e72 !important;
+    }
+    
+    /* Headers colorés */
+    h1, h2, h3, h4, h5, h6 {
+        color: #2d3436 !important;
+    }
+    
+    /* Enhanced input fields */
+    .stSelectbox, .stNumberInput, .stTextInput {
+        background: white;
+        border-radius: 10px;
+    }
+    
+    /* Tab styling moderne */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 10px;
+    }
+    
+    .stTabs [data-baseweb="tab"] {
+        background: white;
+        border-radius: 10px 10px 0 0;
+        padding: 10px 20px;
+        border: none;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+    
+    .stTabs [aria-selected="true"] {
+        background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+        color: white !important;
+    }
+    
+    /* Progress bar custom */
+    .stProgress > div > div > div {
+        background: linear-gradient(90deg, #00b894 0%, #00cec9 100%);
+    }
+    
+    /* Spinner custom */
+    .stSpinner > div {
+        border: 4px solid #00b894;
+        border-top: 4px solid #00cec9;
+    }
+    
+    /* Alert styling */
+    .stSuccess {
+        background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+        border-radius: 10px;
+        color: white;
     }
     
     /* Hide Streamlit branding */
@@ -215,42 +231,23 @@ st.markdown("""
     footer {visibility: hidden;}
     header {visibility: hidden;}
     
-    /* Theme sombre */
-    .stApp {
-        background-color: #0e1117;
-        color: #fafafa;
-    }
-    
-    /* Headers */
-    h1, h2, h3, h4, h5, h6 {
-        color: #667eea !important;
-    }
-    
-    /* Sidebar */
-    section[data-testid="stSidebar"] {
-        background-color: #161b22;
-    }
-    
-    /* Cards */
-    div.stMetric {
-        background-color: #161b22;
-        padding: 15px;
+    /* Style pour les expanders */
+    .streamlit-expanderHeader {
+        background: white;
         border-radius: 10px;
-        border: 1px solid #30363d;
+        font-weight: 600;
     }
     
-    /* Messages */
-    .stSuccess {
-        background-color: #161b22;
-        border-left: 4px solid #238636;
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+        width: 8px;
     }
-    .stError {
-        background-color: #161b22;
-        border-left: 4px solid #da3633;
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
     }
-    .stInfo {
-        background-color: #161b22;
-        border-left: 4px solid #58a6ff;
+    ::-webkit-scrollbar-thumb {
+        background: #00b894;
+        border-radius: 4px;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -268,10 +265,10 @@ def load_data_from_file(uploaded_file):
         elif uploaded_file.name.endswith('.xlsx'):
             return pd.read_excel(uploaded_file)
         else:
-            st.error("Format de fichier non supporté. Utilisez CSV ou Excel.")
+            st.error("❌ Format de fichier non supporté. Utilisez CSV ou Excel.")
             return None
     except Exception as e:
-        st.error(f"Erreur lors du chargement: {e}")
+        st.error(f"❌ Erreur lors du chargement: {e}")
         return None
 
 @st.cache_data
@@ -306,84 +303,46 @@ def preprocess_data(df, target_col='Response'):
 
 def train_ensemble_model(X, y, model_type='voting'):
     """Entraîner différents types de modèles"""
-    # Division des données
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=42, stratify=y
     )
     
-    # Standardisation
     scaler = StandardScaler()
     X_train_scaled = scaler.fit_transform(X_train)
     X_test_scaled = scaler.transform(X_test)
     
-    # Définition des modèles
-    # Random Forest
+    # Modèles
     rf = RandomForestClassifier(
-        n_estimators=150,
-        max_depth=12,
-        min_samples_split=5,
-        min_samples_leaf=2,
-        random_state=42,
-        class_weight='balanced',
-        n_jobs=-1
+        n_estimators=150, max_depth=12, min_samples_split=5,
+        min_samples_leaf=2, random_state=42, class_weight='balanced', n_jobs=-1
     )
     
-    # Gradient Boosting
     gb = GradientBoostingClassifier(
-        n_estimators=150,
-        max_depth=6,
-        learning_rate=0.1,
-        random_state=42
+        n_estimators=150, max_depth=6, learning_rate=0.1, random_state=42
     )
     
-    # Logistic Regression
     lr = LogisticRegression(
-        random_state=42,
-        class_weight='balanced',
-        max_iter=1000,
-        C=0.5
-    )
-    
-    # AdaBoost
-    ada = AdaBoostClassifier(
-        n_estimators=100,
-        learning_rate=0.5,
-        random_state=42
+        random_state=42, class_weight='balanced', max_iter=1000, C=0.5
     )
     
     if model_type == 'voting':
-        # Voting Classifier (Soft Voting)
         ensemble = VotingClassifier(
-            estimators=[
-                ('rf', rf),
-                ('gb', gb),
-                ('lr', lr)
-            ],
-            voting='soft',
-            n_jobs=-1
+            estimators=[('rf', rf), ('gb', gb), ('lr', lr)],
+            voting='soft', n_jobs=-1
         )
     elif model_type == 'stacking':
-        # Stacking Classifier
         ensemble = StackingClassifier(
-            estimators=[
-                ('rf', rf),
-                ('gb', gb),
-                ('lr', lr)
-            ],
-            final_estimator=LogisticRegression(class_weight='balanced'),
-            cv=5
+            estimators=[('rf', rf), ('gb', gb), ('lr', lr)],
+            final_estimator=LogisticRegression(class_weight='balanced'), cv=5
         )
     else:
         ensemble = rf
     
-    # Entraînement
     ensemble.fit(X_train_scaled, y_train)
     
-    # Prédictions
     y_pred = ensemble.predict(X_test_scaled)
     y_proba = ensemble.predict_proba(X_test_scaled)[:, 1]
     
-    # Métriques
     metrics = {
         'accuracy': accuracy_score(y_test, y_pred),
         'precision': precision_score(y_test, y_pred),
@@ -392,14 +351,12 @@ def train_ensemble_model(X, y, model_type='voting'):
         'roc_auc': auc(roc_curve(y_test, y_proba)[0], roc_curve(y_test, y_proba)[1])
     }
     
-    # Cross-validation
     cv_scores = cross_val_score(ensemble, X_train_scaled, y_train, cv=5, scoring='f1')
     
     return ensemble, scaler, X_test_scaled, y_test, y_pred, y_proba, metrics, cv_scores
 
 def create_feature_importance_plot(model, feature_names):
-    """Créer un graphique d'importance des features avec Plotly"""
-    # Extraire l'importance des features
+    """Créer un graphique d'importance des features"""
     if hasattr(model, 'feature_importances_'):
         importances = model.feature_importances_
     elif hasattr(model, 'named_estimators_'):
@@ -407,256 +364,200 @@ def create_feature_importance_plot(model, feature_names):
     else:
         return None
     
-    # Créer le DataFrame
     importance_df = pd.DataFrame({
         'feature': feature_names,
         'importance': importances
     }).sort_values('importance', ascending=True)
     
-    # Créer le graphique avec Plotly
     fig = px.bar(
-        importance_df, 
-        x='importance', 
-        y='feature',
-        orientation='h',
-        title="🔍 Importance des Features dans la Prédiction",
-        color='importance',
-        color_continuous_scale='Viridis',
+        importance_df, x='importance', y='feature',
+        orientation='h', title="📊 Importance des Caractéristiques",
+        color='importance', color_continuous_scale='Teal',
         text='importance'
     )
     
     fig.update_traces(texttemplate='%{text:.3f}', textposition='outside')
     fig.update_layout(
-        template="plotly_white",
-        height=500,
-        xaxis_title="Importance",
-        yaxis_title="Features"
+        template="plotly_white", height=500,
+        xaxis_title="Importance", yaxis_title="Features",
+        font=dict(family="Poppins")
     )
-    
     return fig
 
 def create_confusion_matrix_plot(y_true, y_pred):
-    """Créer une matrice de confusion avec Plotly"""
+    """Créer une matrice de confusion"""
     cm = confusion_matrix(y_true, y_pred)
     
     fig = go.Figure(data=go.Heatmap(
-        z=cm,
-        x=['Prédit: Non', 'Prédit: Oui'],
+        z=cm, x=['Prédit: Non', 'Prédit: Oui'],
         y=['Réel: Non', 'Réel: Oui'],
-        colorscale='Blues',
-        text=cm,
-        texttemplate='%{text}',
-        textfont={"size": 20},
-        showscale=False
+        colorscale='Teal', text=cm, texttemplate='%{text}',
+        textfont={"size": 25}, showscale=False
     ))
     
-    fig.update_layout(
-        title="📊 Matrice de Confusion",
-        template="plotly_white",
-        height=400
-    )
-    
+    fig.update_layout(title="🎯 Matrice de Confusion", template="plotly_white", height=400)
     return fig
 
 def create_roc_curve_plot(y_true, y_proba):
-    """Créer la courbe ROC avec Plotly"""
+    """Créer la courbe ROC"""
     fpr, tpr, _ = roc_curve(y_true, y_proba)
     roc_auc = auc(fpr, tpr)
     
     fig = go.Figure()
-    
     fig.add_trace(go.Scatter(
-        x=fpr, y=tpr,
-        mode='lines',
-        name=f'Courbe ROC (AUC = {roc_auc:.3f})',
-        line=dict(color='#667eea', width=3)
+        x=fpr, y=tpr, mode='lines',
+        name=f'ROC (AUC = {roc_auc:.3f})',
+        line=dict(color='#00b894', width=3)
     ))
-    
     fig.add_trace(go.Scatter(
-        x=[0, 1], y=[0, 1],
-        mode='lines',
-        name='Aléatoire',
-        line=dict(color='#eb3349', width=2, dash='dash')
+        x=[0, 1], y=[0, 1], mode='lines',
+        name='Aléatoire', line=dict(color='#e17055', width=2, dash='dash')
     ))
     
     fig.update_layout(
-        title="🎯 Courbe ROC",
-        xaxis_title="Taux de Faux Positifs",
-        yaxis_title="Taux de Vrais Positifs",
-        template="plotly_white",
-        height=400,
-        legend=dict(x=0.7, y=0.1)
+        title="📈 Courbe ROC", xaxis_title="FPR",
+        yaxis_title="TPR", template="plotly_white", height=400,
+        legend=dict(x=0.7, y=0.1), font=dict(family="Poppins")
     )
-    
     return fig
 
 def create_precision_recall_plot(y_true, y_proba):
-    """Créer la courbe Precision-Recall avec Plotly"""
+    """Créer la courbe Precision-Recall"""
     precision, recall, _ = precision_recall_curve(y_true, y_proba)
     avg_precision = average_precision_score(y_true, y_proba)
     
     fig = go.Figure()
-    
     fig.add_trace(go.Scatter(
-        x=recall, y=precision,
-        mode='lines',
-        name=f'Courbe PR (AP = {avg_precision:.3f})',
-        line=dict(color='#38ef7d', width=3)
+        x=recall, y=precision, mode='lines',
+        name=f'PR (AP = {avg_precision:.3f})',
+        line=dict(color='#00cec9', width=3)
     ))
     
     fig.update_layout(
-        title="📈 Courbe Precision-Recall",
-        xaxis_title="Recall (Rappel)",
-        yaxis_title="Precision",
-        template="plotly_white",
-        height=400,
-        legend=dict(x=0.7, y=1)
+        title="📉 Courbe Precision-Recall", xaxis_title="Recall",
+        yaxis_title="Precision", template="plotly_white", height=400,
+        font=dict(family="Poppins")
     )
-    
     return fig
 
 # ============================================================================
-# SIDEBAR - CONFIGURATION
+# SIDEBAR - CONFIGURATION MODERNISÉE
 # ============================================================================
 
 def create_sidebar():
-    """Crée la barre latérale de configuration"""
+    """Crée la barre latérale avec nouveau design"""
     
+    # Logo/Titre dans sidebar
     st.sidebar.markdown("""
-    <div style='text-align: center; padding: 20px 0;'>
-        <h2 style='color: #667eea; margin: 0;'>⚙️ Configuration</h2>
+    <div style='text-align: center; padding: 25px 10px;'>
+        <div style='font-size: 50px;'>🚗</div>
+        <h2 style='color: #00b894; margin: 10px 0; font-weight: 700;'>AUTO-ASSUR</h2>
+        <p style='color: #636e72; font-size: 12px;'>ML Prédictif</p>
     </div>
     """, unsafe_allow_html=True)
     
     st.sidebar.markdown("---")
     
-    # Choix de la source de données
-    st.sidebar.markdown("### 📁 Source de Données")
+    # Source de données
+    st.sidebar.markdown("### 📂 Source de Données")
     data_source = st.sidebar.radio(
-        "Sélectionner la source:",
-        ["Dataset par défaut (merged_dataset.csv)", "Importer un fichier"]
+        "Sélectionner:", ["Dataset défaut", "Importer fichier"]
     )
     
     df = None
     
-    if data_source == "Importer un fichier":
+    if data_source == "Importer fichier":
         uploaded_file = st.sidebar.file_uploader(
-            "Télécharger un fichier CSV ou Excel",
-            type=['csv', 'xlsx']
+            "Charger CSV/Excel", type=['csv', 'xlsx']
         )
         if uploaded_file:
             df = load_data_from_file(uploaded_file)
             if df is not None:
-                st.sidebar.success(f"Fichier chargé: {uploaded_file.name}")
+                st.sidebar.success(f"✅ {uploaded_file.name}")
     else:
         df = load_default_data()
-        st.sidebar.info("Dataset merged_dataset.csv chargé par défaut")
+        st.sidebar.info("📊 Dataset chargé")
     
     st.sidebar.markdown("---")
     
-    # Configuration du modèle
-    st.sidebar.markdown("### 🤖 Paramètres du Modèle")
+    # Paramètres du modèle
+    st.sidebar.markdown("### ⚙️ Modèle ML")
     
     model_type = st.sidebar.selectbox(
-        "Type de Modèle d'Ensemble",
+        "Algorithme",
         ['voting', 'stacking', 'random_forest'],
         format_func=lambda x: {
-            'voting': '🗳️ Voting Classifier',
-            'stacking': '🧱 Stacking Classifier',
+            'voting': '🗳️ Voting',
+            'stacking': '🧱 Stacking',
             'random_forest': '🌲 Random Forest'
-        }[x],
-        help="Voting combine les prédictions, Stacking utilise un méta-modèle"
+        }[x]
     )
-    
-    test_size = st.sidebar.slider("Taille du Test (%)", 10, 40, 20) / 100
     
     st.sidebar.markdown("---")
     
-    # Navigation principale
+    # Navigation avec icons
     st.sidebar.markdown("### 🧭 Navigation")
     page = st.sidebar.selectbox(
-        "Aller à:",
-        ["🏠 Accueil", "🔮 Prédiction", "📊 Analyse Exploratoire", "📈 Performance du Modèle", "🎓 Guide"]
+        "Pages:",
+        ["🏠 Accueil", "🔮 Prédiction", "📊 Analyse", "📈 Performance", "❓ Guide"]
     )
     
     st.sidebar.markdown("---")
     
-    # Informations sur le projet
+    # Badge
     st.sidebar.markdown("""
-    <div style='background: rgba(102, 126, 234, 0.1); border-radius: 10px; padding: 15px; border: 1px solid #667eea;'>
-        <h4 style='color: #667eea; margin: 0 0 10px 0;'>📋 À propos</h4>
-        <p style='color: #c9d1d9; font-size: 12px; margin: 0;'>
-            <b>TP2 IIA S6 2025-2026</b><br>
-            Modèles ML d'Ensemble<br>
-            Développé par HLDX - Henri Ledoux SAME
-        </p>
+    <div style='background: linear-gradient(135deg, #00b894 0%, #00cec9 100%); 
+                border-radius: 15px; padding: 20px; text-align: center;'>
+        <p style='color: white; margin: 0; font-weight: 600;'>TP2 IIA S6</p>
+        <p style='color: rgba(255,255,255,0.8); font-size: 12px; margin: 5px 0;'>2025-2026</p>
     </div>
     """, unsafe_allow_html=True)
     
-    return df, model_type, test_size, page
+    return df, model_type, page
 
 # ============================================================================
-# PAGE D'ACCUEIL
+# PAGE D'ACCUEIL - NOUVEAU DESIGN
 # ============================================================================
 
 def show_homepage():
-    """Affiche la page d'accueil"""
+    """Affiche la page d'accueil avec nouveau design"""
     
-    # Hero section
+    # Hero section moderne
     st.markdown("""
-    <div style='text-align: center; padding: 40px 0;' class='fade-in'>
-        <h1 style='font-size: 3rem; margin-bottom: 10px;'>
-            <span class='title-gradient'>🏥 Prédiction Assurance Véhicule</span>
-        </h1>
-        <p style='font-size: 1.2rem; color: #888;'>
-            Intelligence Artificielle pour identifier les clients susceptibles d'être intéressés par une assurance véhicule
+    <div style='text-align: center; padding: 50px 20px;' class='slide-in'>
+        <div style='font-size: 80px; margin-bottom: 20px;'>🚗✨</div>
+        <h1 class='title-gradient'>Prédiction Assurance Véhicule</h1>
+        <p style='font-size: 1.3rem; color: #636e72; max-width: 600px; margin: 20px auto;'>
+            Intelligence Artificielle pour identifier les clients intéressés par une assurance véhicule
         </p>
     </div>
     """, unsafe_allow_html=True)
     
-    # Features
-    col1, col2, col3, col4 = st.columns(4)
+    # Cartes de fonctionnalités
+    st.markdown("### ✨ Fonctionnalités")
     
-    with col1:
-        st.markdown("""
-        <div class='dark-card' style='text-align: center;'>
-            <h3 style='color: #667eea;'>📊</h3>
-            <h4>Analyse Interactive</h4>
-            <p style='color: #888;'>Visualisez vos données en temps réel</p>
-        </div>
-        """, unsafe_allow_html=True)
+    cols = st.columns(4)
+    features = [
+        ("📊", "Analyse Interactive", "Visualisez vos données"),
+        ("🤖", "ML d'Ensemble", "Modèles avancés"),
+        ("📈", "Métriques", "Évaluation complète"),
+        ("🔮", "Prédiction", "Testez en temps réel")
+    ]
     
-    with col2:
-        st.markdown("""
-        <div class='dark-card' style='text-align: center;'>
-            <h3 style='color: #667eea;'>🤖</h3>
-            <h4>ML d'Ensemble</h4>
-            <p style='color: #888;'>Random Forest, Gradient Boosting, Voting</p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col3:
-        st.markdown("""
-        <div class='dark-card' style='text-align: center;'>
-            <h3 style='color: #667eea;'>📈</h3>
-            <h4>Métriques Détaillées</h4>
-            <p style='color: #888;'>Évaluation complète des performances</p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col4:
-        st.markdown("""
-        <div class='dark-card' style='text-align: center;'>
-            <h3 style='color: #667eea;'>🔮</h3>
-            <h4>Prédiction</h4>
-            <p style='color: #888;'>Testez avec vos propres données</p>
-        </div>
-        """, unsafe_allow_html=True)
+    for col, (icon, title, desc) in zip(cols, features):
+        with col:
+            st.markdown(f"""
+            <div class='modern-card' style='text-align: center; padding: 20px;'>
+                <div style='font-size: 40px;'>{icon}</div>
+                <h4 style='color: #00b894; margin: 10px 0;'>{title}</h4>
+                <p style='color: #636e72; font-size: 0.9rem;'>{desc}</p>
+            </div>
+            """, unsafe_allow_html=True)
     
     st.markdown("---")
     
-    # Statistiques rapides
-    st.markdown("### 📈 Aperçu des Données")
+    # Statistiques
+    st.markdown("### 📊 Aperçu des Données")
     
     try:
         df = load_default_data()
@@ -664,67 +565,65 @@ def show_homepage():
         col1, col2, col3, col4 = st.columns(4)
         
         with col1:
-            st.metric("📊 Total Clients", len(df))
+            st.metric("👥 Total Clients", f"{len(df):,}")
         with col2:
             if 'Response' in df.columns:
-                positives = (df['Response'] == 1).sum()
-                st.metric("✅ Intéressés", positives)
-            else:
-                st.metric("✅ Intéressés", "N/A")
+                interested = (df['Response'] == 1).sum()
+                st.metric("✅ Intéressés", f"{interested:,}")
         with col3:
             if 'Response' in df.columns:
                 rate = (df['Response'] == 1).mean() * 100
-                st.metric("📈 Taux d'Intérêt", f"{rate:.1f}%")
-            else:
-                st.metric("📈 Taux d'Intérêt", "N/A")
+                st.metric("📈 Taux", f"{rate:.1f}%")
         with col4:
-            st.metric("📋 Nombre de Features", df.shape[1] - 2)  # Exclude id and dataset_type
+            st.metric("📋 Features", df.shape[1] - 2)
         
-        # Aperçu des données
-        st.markdown("### 👀 Aperçu des Données")
-        st.dataframe(df.head(10), width='stretch')
+        # Preview
+        st.markdown("### 👁️ Aperçu")
+        st.dataframe(
+            df.head(8), 
+            use_container_width=True,
+            hide_index=True
+        )
         
     except Exception as e:
-        st.warning(f"Impossible de charger les données: {e}")
+        st.error(f"❌ Erreur: {e}")
     
-    # Instructions
+    # Guide
     st.markdown("---")
     st.markdown("""
-    <div class='dark-card fade-in'>
-        <h2>🚀 Comment utiliser</h2>
-        <ol style='font-size: 1.1rem; line-height: 2; color: #c9d1d9;'>
-            <li><strong>Configurez les paramètres</strong> dans la barre latérale (modèle ML)</li>
-            <li><strong>Allez dans "Prédiction"</strong> pour obtenir des prédictions</li>
-            <li><strong>Analysez les performances</strong> dans la section "Performance du Modèle"</li>
-            <li><strong>Explorez les données</strong> dans "Analyse Exploratoire"</li>
+    <div class='modern-card slide-in'>
+        <h3 style='color: #00b894;'>🚀 Comment utiliser</h3>
+        <ol style='line-height: 2; color: #2d3436;'>
+            <li>Sélectionnez un modèle dans la barre latérale</li>
+            <li>Utilisez <b>"Prédiction"</b> pour prédire l'intérêt d'un client</li>
+            <li>Consultez <b>"Analyse"</b> pour explorer les données</li>
+            <li>Visualisez les performances dans <b>"Performance"</b></li>
         </ol>
     </div>
     """, unsafe_allow_html=True)
 
 # ============================================================================
-# PAGE PRÉDICTION
+# PAGE PRÉDICTION - NOUVEAU DESIGN
 # ============================================================================
 
 def show_prediction_page(df, model_type):
-    """Affiche la page de prédiction"""
+    """Affiche la page de prédiction avec nouveau design"""
     
     st.markdown("""
-    <div style='text-align: center; padding: 20px 0;' class='fade-in'>
-        <h1 style='font-size: 2.5rem; margin-bottom: 10px;'>
-            <span class='title-gradient'>🔮 Prédiction pour un Nouveau Client</span>
-        </h1>
+    <div style='text-align: center; padding: 30px 0;' class='slide-in'>
+        <div style='font-size: 60px;'>🔮</div>
+        <h1 class='title-gradient'>Prédiction en Temps Réel</h1>
     </div>
     """, unsafe_allow_html=True)
     
     if df is not None:
-        # Vérifier si le modèle est déjà entraîné dans la session
+        # Entraîner si pas encore fait
         model_key = f"model_{model_type}"
         
         if model_key not in st.session_state:
-            with st.spinner('🔄 Entraînement du modèle en cours...'):
+            with st.spinner('🔧 Entraînement du modèle...'):
                 data_processed, cat_cols, num_cols = preprocess_data(df)
                 
-                # Encoder les variables catégorielles
                 le_dict = {}
                 for col in cat_cols:
                     le = LabelEncoder()
@@ -736,81 +635,57 @@ def show_prediction_page(df, model_type):
                 
                 model, scaler, X_test, y_test, y_pred, y_proba, metrics, cv_scores = train_ensemble_model(X, y, model_type=model_type)
                 
-                # Stocker dans session_state
                 st.session_state[model_key] = {
-                    'model': model,
-                    'scaler': scaler,
-                    'le_dict': le_dict,
-                    'X': X
+                    'model': model, 'scaler': scaler,
+                    'le_dict': le_dict, 'X': X
                 }
-            st.success("✅ Modèle entraîné avec succès!")
+            st.success("✅ Modèle prêt!")
         else:
-            # Récupérer le modèle depuis session_state
             model_data = st.session_state[model_key]
             model = model_data['model']
             scaler = model_data['scaler']
             le_dict = model_data['le_dict']
             X = model_data['X']
-            st.info("📌 Modèle chargé depuis le cache")
         
-        # Formulaire de saisie
+        # Formulaire
         st.markdown("### 📝 Informations du Client")
         
         col1, col2 = st.columns(2)
         
         with col1:
-            st.markdown("#### 👤 Démographie")
-            gender = st.selectbox("Genre", ['Male', 'Female'], help="Genre du client")
-            age = st.number_input("Âge (18-100)", min_value=18, max_value=100, value=35, 
-                                help="Âge du client en années")
-            driving_license = st.selectbox("Permis de Conduire", [0, 1], 
-                                          format_func=lambda x: "Oui" if x == 1 else "Non",
-                                          help="Le client possède-t-il un permis de conduire?")
-            region_code = st.number_input("Code Région", min_value=0, max_value=60, value=28,
-                                         help="Code de la région du client")
+            with st.container():
+                st.markdown("#### 👤 Profil")
+                gender = st.selectbox("Genre", ['Male', 'Female'])
+                age = st.number_input("Âge", 18, 100, 35)
+                driving_license = st.selectbox("Permis", [1, 0], format_func=lambda x: "Oui" if x else "Non")
+                region = st.number_input("Région", 0, 60, 28)
             
             st.markdown("#### 🚗 Véhicule")
-            vehicle_age = st.selectbox("Âge du Véhicule", ['< 1 Year', '1-2 Year', '> 2 Years'],
-                                      help="Ancienneté du véhicule")
-            vehicle_damage = st.selectbox("Dommages au Véhicule", ['Yes', 'No'],
-                                          help="Le véhicule a-t-il eu des dommages?")
+            vehicle_age = st.selectbox("Âge Véhicule", ['< 1 Year', '1-2 Year', '> 2 Years'])
+            vehicle_damage = st.selectbox("Dommages", ['Yes', 'No'])
         
         with col2:
-            st.markdown("#### 🛡️ Assurances")
-            previously_insured = st.selectbox("Déjà Assuré", [0, 1],
-                                            format_func=lambda x: "Oui" if x == 1 else "Non",
-                                            help="Le client a-t-il déjà une assurance véhicule?")
+            st.markdown("#### 🛡️ Assurance")
+            previously_insured = st.selectbox("Déjà Assuré", [0, 1], format_func=lambda x: "Oui" if x else "Non")
             
-            st.markdown("#### 💰 Financier")
-            annual_premium = st.number_input("Prime Annuelle (€)", value=30000, step=1000,
-                                           help="Montant de la prime d'assurance annuelle")
+            st.markdown("#### 💵 Finance")
+            premium = st.number_input("Prime (€)", 1000, 200000, 30000, 1000)
             
-            st.markdown("#### 📞 Contact & Campagne")
-            policy_sales_channel = st.selectbox("Canal de Vente", 
-                                                [26, 152, 124, 160, 156, 122, 13, 14],
-                                                help="Canal de distribution utilisé")
-            vintage = st.number_input("Ancienneté (jours)", min_value=0, max_value=300, value=200,
-                                     help="Nombre de jours depuis que le client est en contact avec la société")
+            st.markdown("#### 📞 Contact")
+            channel = st.selectbox("Canal", [26, 152, 124, 160, 156])
+            vintage = st.number_input("Vintage (jours)", 0, 300, 200)
         
         st.markdown("---")
         
         # Bouton de prédiction
-        if st.button("🔮 Obtenir la Prédiction", type="primary", use_container_width=True):
-            # Créer le vecteur de caractéristiques
+        if st.button("🔮 Prédire l'Intérêt", type="primary", use_container_width=True):
             input_data = pd.DataFrame({
-                'Gender': [gender],
-                'Age': [age],
-                'Driving_License': [driving_license],
-                'Region_Code': [region_code],
-                'Previously_Insured': [previously_insured],
-                'Vehicle_Age': [vehicle_age],
-                'Vehicle_Damage': [vehicle_damage],
-                'Annual_Premium': [annual_premium],
-                'Policy_Sales_Channel': [policy_sales_channel],
-                'Vintage': [vintage]
+                'Gender': [gender], 'Age': [age], 'Driving_License': [driving_license],
+                'Region_Code': [region], 'Previously_Insured': [previously_insured],
+                'Vehicle_Age': [vehicle_age], 'Vehicle_Damage': [vehicle_damage],
+                'Annual_Premium': [premium], 'Policy_Sales_Channel': [channel], 'Vintage': [vintage]
             })
             
-            # Encoder les variables catégorielles
             for col in input_data.columns:
                 if col in le_dict:
                     try:
@@ -818,244 +693,141 @@ def show_prediction_page(df, model_type):
                     except:
                         input_data[col] = 0
             
-            # Standardiser
             input_scaled = scaler.transform(input_data)
-            
-            # Prédire
             prediction = model.predict(input_scaled)[0]
             proba = model.predict_proba(input_scaled)[0]
             
-            # Afficher le résultat
-            st.markdown("---")
-            st.markdown("### 🎯 Résultat de la Prédiction")
-            
-            col1, col2 = st.columns(2)
+            # Résultat
+            st.markdown("### 🎯 Résultat")
             
             if prediction == 1:
-                with col1:
-                    st.markdown("""
-                    <div style='background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); 
-                                border-radius: 15px; padding: 30px; text-align: center; color: white;'>
-                        <h1 style='margin: 0;'>✅ Intéressé!</h1>
-                        <p style='font-size: 1.2rem;'>Le client est susceptible d'être intéressé par l'assurance véhicule</p>
-                    </div>
-                    """, unsafe_allow_html=True)
-                with col2:
-                    st.metric("Probabilité d'intérêt", f"{proba[1]*100:.1f}%")
-                
-                st.markdown("""
-                <div class='success-box'>
-                    <b>Recommandation:</b> Ce client est un bon candidat pour une offre d'assurance véhicule. 
-                    Priorisez ce contact dans votre stratégie de ciblage.
+                st.markdown(f"""
+                <div class='gradient-card' style='text-align: center;'>
+                    <div style='font-size: 60px;'>✅</div>
+                    <h2 style='margin: 15px 0;'>Intéressé!</h2>
+                    <p style='font-size: 1.2rem;'>Probabilité: {proba[1]*100:.1f}%</p>
                 </div>
                 """, unsafe_allow_html=True)
             else:
-                with col1:
-                    st.markdown("""
-                    <div style='background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%); 
-                                border-radius: 15px; padding: 30px; text-align: center; color: white;'>
-                        <h1 style='margin: 0;'>❌ Non Intéressé</h1>
-                        <p style='font-size: 1.2rem;'>Le client a une faible probabilité d'intérêt</p>
-                    </div>
-                    """, unsafe_allow_html=True)
-                with col2:
-                    st.metric("Probabilité de désintérêt", f"{proba[0]*100:.1f}%")
-                
-                st.markdown("""
-                <div class='warning-box'>
-                    <b>Recommandation:</b> Ce client a une faible probabilité d'intérêt. 
-                    Vous pouvez considérer d'allouer vos ressources à d'autres prospects.
+                st.markdown(f"""
+                <div class='gradient-card' style='background: linear-gradient(135deg, #e17055 0%, #d63031 100%); text-align: center;'>
+                    <div style='font-size: 60px;'>❌</div>
+                    <h2 style='margin: 15px 0;'>Non Intéressé</h2>
+                    <p style='font-size: 1.2rem;'>Probabilité: {proba[0]*100:.1f}%</p>
                 </div>
                 """, unsafe_allow_html=True)
             
-            # Facteurs d'influence
-            st.markdown("---")
-            st.markdown("### 🔍 Facteurs d'Influence")
-            
+            # Feature importance
+            st.markdown("### 📊 Impact")
             fig = create_feature_importance_plot(model, X.columns)
             if fig:
                 st.plotly_chart(fig, use_container_width=True)
     else:
-        st.warning("⚠️ Veuillez charger un jeu de données dans la barre latérale.")
+        st.error("❌ Veuillez charger des données")
 
 # ============================================================================
-# PAGE ANALYSE EXPLORATOIRE
+# PAGE ANALYSE - NOUVEAU DESIGN
 # ============================================================================
 
 def show_analysis_page(df):
-    """Affiche la page d'analyse exploratoire"""
+    """Affiche la page d'analyse avec nouveau design"""
     
     st.markdown("""
-    <div style='text-align: center; padding: 20px 0;' class='fade-in'>
-        <h1 style='font-size: 2.5rem; margin-bottom: 10px;'>
-            <span class='title-gradient'>📊 Analyse Exploratoire des Données</span>
-        </h1>
+    <div style='text-align: center; padding: 30px 0;' class='slide-in'>
+        <div style='font-size: 60px;'>📊</div>
+        <h1 class='title-gradient'>Analyse Exploratoire</h1>
     </div>
     """, unsafe_allow_html=True)
     
     if df is not None:
-        # Tabs pour différentes analyses
-        tab1, tab2, tab3, tab4 = st.tabs(["📈 Statistiques", "🎯 Variable Cible", "👥 Démographie", "📊 Corrélations"])
+        tabs = st.tabs(["📈 Stats", "🎯 Target", "👥 Démo", "🔗 Corrélation"])
         
-        with tab1:
-            st.markdown("### 📈 Statistiques Descriptives")
-            
-            # Statistiques numériques
-            st.markdown("#### Variables Numériques")
+        with tabs[0]:
+            st.markdown("### Statistiques Descriptives")
             numeric_df = df.select_dtypes(include=['int64', 'float64'])
             if 'id' in numeric_df.columns:
                 numeric_df = numeric_df.drop('id', axis=1)
             st.dataframe(numeric_df.describe(), use_container_width=True)
         
-        with tab2:
-            st.markdown("### 🎯 Analyse de la Variable Cible")
-            
+        with tabs[1]:
+            st.markdown("### Variable Cible")
             if 'Response' in df.columns:
-                # Graphique interactif avec Plotly
-                fig = go.Figure(data=[
-                    go.Bar(
-                        x=['Non Intéressé (0)', 'Intéressé (1)'],
-                        y=[(df['Response'] == 0).sum(), (df['Response'] == 1).sum()],
-                        marker_color=['#eb3349', '#11998e'],
-                        text=[f"{(df['Response'] == 0).mean()*100:.1f}%", f"{(df['Response'] == 1).mean()*100:.1f}%"],
-                        textposition='auto'
-                    )
-                ])
-                
-                fig.update_layout(
-                    title="Distribution des Réponses",
-                    xaxis_title="Classe",
-                    yaxis_title="Nombre de clients",
-                    template="plotly_white",
-                    height=400
+                fig = px.pie(
+                    df, names=df['Response'].map({0: 'Non Intéressé', 1: 'Intéressé'}),
+                    title="Distribution", color_discrete_sequence=['#e17055', '#00b894']
                 )
-                
+                fig.update_layout(template="plotly_white")
                 st.plotly_chart(fig, use_container_width=True)
                 
-                # Métriques
                 col1, col2 = st.columns(2)
-                with col1:
-                    st.metric("Total des Clients", len(df))
-                with col2:
-                    st.metric("Taux d'Intérêt", f"{(df['Response'] == 1).mean()*100:.1f}%")
+                col1.metric("Total", len(df))
+                col2.metric("Taux positif", f"{(df['Response']==1).mean()*100:.1f}%")
         
-        with tab3:
-            st.markdown("### 👥 Analyse Démographique")
+        with tabs[2]:
+            st.markdown("### Analyse Démographique")
             
-            # Analyse par âge avec Plotly
             if 'Age' in df.columns and 'Response' in df.columns:
-                fig = px.histogram(
-                    df, 
-                    x='Age', 
-                    color='Response',
-                    title="Distribution par Âge selon la Réponse",
-                    color_discrete_map={1: '#11998e', 0: '#eb3349'},
-                    barmode='overlay'
+                fig = px.box(
+                    df, x='Response', y='Age', color='Response',
+                    title="Âge vs Réponse",
+                    color_discrete_map={0: '#e17055', 1: '#00b894'}
                 )
-                fig.update_layout(template="plotly_white", height=400)
+                fig.update_layout(template="plotly_white")
                 st.plotly_chart(fig, use_container_width=True)
             
-            # Analyse par genre
             if 'Gender' in df.columns and 'Response' in df.columns:
-                gender_response = df.groupby('Gender')['Response'].mean() * 100
-                
                 fig = px.bar(
-                    gender_response, 
-                    x=gender_response.index,
-                    y=gender_response.values,
-                    title="Taux d'Intérêt par Genre",
-                    color=gender_response.values,
-                    color_continuous_scale='Viridis',
-                    text=gender_response.values
+                    df.groupby('Gender')['Response'].mean() * 100,
+                    title="Taux par Genre",
+                    color_discrete_sequence=['#00b894']
                 )
-                fig.update_traces(texttemplate='%{text:.1f}%', textposition='outside')
-                fig.update_layout(template="plotly_white", height=400)
-                st.plotly_chart(fig, use_container_width=True)
-            
-            # Analyse par âge du véhicule
-            if 'Vehicle_Age' in df.columns and 'Response' in df.columns:
-                vehicle_age_response = df.groupby('Vehicle_Age')['Response'].mean() * 100
-                
-                fig = px.bar(
-                    vehicle_age_response, 
-                    x=vehicle_age_response.index,
-                    y=vehicle_age_response.values,
-                    title="Taux d'Intérêt par Âge du Véhicule",
-                    color=vehicle_age_response.values,
-                    color_continuous_scale='Viridis',
-                    text=vehicle_age_response.values
-                )
-                fig.update_traces(texttemplate='%{text:.1f}%', textposition='outside')
-                fig.update_layout(template="plotly_white", height=400)
+                fig.update_layout(template="plotly_white")
                 st.plotly_chart(fig, use_container_width=True)
         
-        with tab4:
-            st.markdown("### 📊 Matrice de Corrélation")
-            
-            # Préparer les données pour la corrélation
+        with tabs[3]:
+            st.markdown("### Matrice de Corrélation")
             data_corr = df.copy()
-            
-            # Supprimer les colonnes non numériques
             if 'id' in data_corr.columns:
                 data_corr = data_corr.drop('id', axis=1)
             if 'dataset_type' in data_corr.columns:
                 data_corr = data_corr.drop('dataset_type', axis=1)
             
-            # Encoder les variables catégorielles pour la corrélation
             for col in data_corr.select_dtypes(include=['object']).columns:
                 try:
                     data_corr[col] = LabelEncoder().fit_transform(data_corr[col])
                 except:
                     data_corr = data_corr.drop(col, axis=1)
             
-            # Calculer la corrélation
-            corr_matrix = data_corr.corr()
+            corr = data_corr.corr()
             
-            # Afficher la heatmap avec Plotly
             fig = go.Figure(data=go.Heatmap(
-                z=corr_matrix.values,
-                x=corr_matrix.columns,
-                y=corr_matrix.columns,
-                colorscale='RdBu_r',
-                zmid=0,
-                text=corr_matrix.values,
-                texttemplate='%{text:.2f}',
-                textfont={"size": 8}
+                z=corr.values, x=corr.columns, y=corr.columns,
+                colorscale='Teal', zmid=0
             ))
-            
-            fig.update_layout(
-                title="Matrice de Corrélation des Variables",
-                template="plotly_white",
-                height=600
-            )
-            
+            fig.update_layout(template="plotly_white", height=500)
             st.plotly_chart(fig, use_container_width=True)
     else:
-        st.warning("⚠️ Veuillez charger un jeu de données.")
+        st.error("❌ Aucune donnée")
 
 # ============================================================================
-# PAGE PERFORMANCE DU MODÈLE
+# PAGE PERFORMANCE - NOUVEAU DESIGN
 # ============================================================================
 
-def show_performance_page(df, model_type, test_size):
-    """Affiche la page de performance du modèle"""
+def show_performance_page(df, model_type):
+    """Affiche la page de performance"""
     
     st.markdown("""
-    <div style='text-align: center; padding: 20px 0;' class='fade-in'>
-        <h1 style='font-size: 2.5rem; margin-bottom: 10px;'>
-            <span class='title-gradient'>📈 Performance du Modèle</span>
-        </h1>
+    <div style='text-align: center; padding: 30px 0;' class='slide-in'>
+        <div style='font-size: 60px;'>📈</div>
+        <h1 class='title-gradient'>Performance du Modèle</h1>
     </div>
     """, unsafe_allow_html=True)
     
     if df is not None:
-        # Entraînement
-        if st.button("🚀 Entraîner le Modèle", type="primary"):
-            with st.spinner('🔄 Entraînement en cours...'):
-                # Prétraitement
+        if st.button("🚀 Entraîner", type="primary"):
+            with st.spinner('⏳ Entraînement en cours...'):
                 data_processed, cat_cols, num_cols = preprocess_data(df)
                 
-                # Encoder
                 le_dict = {}
                 for col in cat_cols:
                     le = LabelEncoder()
@@ -1065,12 +837,8 @@ def show_performance_page(df, model_type, test_size):
                 X = data_processed.drop('Response', axis=1)
                 y = data_processed['Response']
                 
-                # Entraîner
-                model, scaler, X_test, y_test, y_pred, y_proba, metrics, cv_scores = train_ensemble_model(
-                    X, y, model_type=model_type
-                )
+                model, scaler, X_test, y_test, y_pred, y_proba, metrics, cv_scores = train_ensemble_model(X, y, model_type)
                 
-                # Stocker dans session state
                 st.session_state['model'] = model
                 st.session_state['scaler'] = scaler
                 st.session_state['X_test'] = X_test
@@ -1081,199 +849,121 @@ def show_performance_page(df, model_type, test_size):
                 st.session_state['cv_scores'] = cv_scores
                 st.session_state['X'] = X
             
-            st.success("✅ Modèle entraîné avec succès!")
+            st.success("✅ Entraînement terminé!")
         
-        # Afficher les résultats si disponibles
         if 'metrics' in st.session_state:
-            metrics = st.session_state['metrics']
-            cv_scores = st.session_state['cv_scores']
+            m = st.session_state['metrics']
+            cv = st.session_state['cv_scores']
             
-            # Métriques principales
-            st.markdown("### 🎯 Métriques de Performance")
+            # Métriques
+            st.markdown("### 🎯 Métriques")
+            cols = st.columns(5)
+            cols[0].metric("Accuracy", f"{m['accuracy']*100:.1f}%")
+            cols[1].metric("Precision", f"{m['precision']*100:.1f}%")
+            cols[2].metric("Recall", f"{m['recall']*100:.1f}%")
+            cols[3].metric("F1-Score", f"{m['f1']*100:.1f}%")
+            cols[4].metric("ROC-AUC", f"{m['roc_auc']*100:.1f}%")
             
-            col1, col2, col3, col4 = st.columns(4)
-            
-            with col1:
-                st.metric("Accuracy", f"{metrics['accuracy']*100:.1f}%")
-            with col2:
-                st.metric("Precision", f"{metrics['precision']*100:.1f}%")
-            with col3:
-                st.metric("Recall", f"{metrics['recall']*100:.1f}%")
-            with col4:
-                st.metric("F1-Score", f"{metrics['f1']*100:.1f}%")
-            
-            # Métriques supplémentaires
-            col1, col2 = st.columns(2)
-            
-            with col1:
-                st.metric("ROC-AUC", f"{metrics['roc_auc']*100:.1f}%")
-            with col2:
-                st.metric("Cross-Val F1", f"{cv_scores.mean()*100:.1f}% ± {cv_scores.std()*100:.1f}%")
-            
-            st.markdown("---")
-            
-            # Visualisations
             st.markdown("### 📊 Visualisations")
             
             col1, col2 = st.columns(2)
-            
             with col1:
                 fig = create_confusion_matrix_plot(st.session_state['y_test'], st.session_state['y_pred'])
                 st.plotly_chart(fig, use_container_width=True)
-            
             with col2:
                 fig = create_roc_curve_plot(st.session_state['y_test'], st.session_state['y_proba'])
                 st.plotly_chart(fig, use_container_width=True)
             
-            # Precision-Recall Curve
             fig = create_precision_recall_plot(st.session_state['y_test'], st.session_state['y_proba'])
             st.plotly_chart(fig, use_container_width=True)
             
-            # Feature Importance
-            st.markdown("### 🔍 Importance des Features")
-            fig = create_feature_importance_plot(
-                st.session_state['model'], 
-                st.session_state['X'].columns
-            )
+            st.markdown("### 🔍 Importance")
+            fig = create_feature_importance_plot(st.session_state['model'], st.session_state['X'].columns)
             st.plotly_chart(fig, use_container_width=True)
     else:
-        st.warning("⚠️ Veuillez charger un jeu de données.")
+        st.error("❌ Aucune donnée")
 
 # ============================================================================
-# PAGE GUIDE
+# PAGE GUIDE - NOUVEAU DESIGN
 # ============================================================================
 
 def show_guide_page():
     """Affiche la page guide"""
     
     st.markdown("""
-    <div style='text-align: center; padding: 20px 0;' class='fade-in'>
-        <h1 style='font-size: 2.5rem; margin-bottom: 10px;'>
-            <span class='title-gradient'>🎓 Guide d'Interprétation</span>
-        </h1>
+    <div style='text-align: center; padding: 30px 0;' class='slide-in'>
+        <div style='font-size: 60px;'>❓</div>
+        <h1 class='title-gradient'>Guide & Documentation</h1>
     </div>
     """, unsafe_allow_html=True)
     
     # Métriques
-    st.markdown("### 📊 Comprendre les Métriques")
-    
-    with st.expander("🎯 Accuracy (Précision Globale)", expanded=True):
+    with st.expander("📊 Métriques d'Évaluation", expanded=True):
         st.markdown("""
-        **Définition:** Proportion de prédictions correctes parmi toutes les prédictions.
-        
-        - > 90%: Excellent
-        - 80-90%: Bon
-        - 70-80%: Acceptable
-        - < 70%: À améliorer
+        - **Accuracy**: % de prédictions correctes
+        - **Precision**: Qualité des prédictions positives
+        - **Recall**: % de positifs trouvés
+        - **F1-Score**: Moyenne Precision/Recall
+        - **ROC-AUC**: Qualité globale du modèle
         """)
     
-    with st.expander("📈 Precision (Précision)"):
+    # Variables
+    with st.expander("📝 Description des Variables"):
         st.markdown("""
-        **Définition:** Proportion de prédictions positives qui sont correctes.
-        
-        Haute précision = Few false positives
-        Utile quand le coût d'un faux positif est élevé
+        | Variable | Description |
+        |----------|-------------|
+        | Gender | Genre (Male/Female) |
+        | Age | Âge du client |
+        | Driving_License | Permis conduire |
+        | Region_Code | Code région |
+        | Previously_Insured | Déjà assuré |
+        | Vehicle_Age | Âge véhicule |
+        | Vehicle_Damage | Dommages véhicule |
+        | Annual_Premium | Prime annuelle |
+        | Policy_Sales_Channel | Canal vente |
+        | Vintage | Jours de relation |
         """)
     
-    with st.expander("📉 Recall (Rappel)"):
+    # Tips
+    with st.expander("💡 Recommandations"):
         st.markdown("""
-        **Définition:** Proportion de positifs réels qui sont correctement identifiés.
-        
-        Haut recall = Few missed positives
-        Utile quand le coût d'un faux négatif est élevé
+        1. Ajustez le seuil selon vos objectifs
+        2. Considérez le coût faux positif vs faux négatif
+        3. Retraînez régulièrement le modèle
+        4. Utilisez la cross-validation
         """)
-    
-    with st.expander("⚖️ F1-Score"):
-        st.markdown("""
-        **Définition:** Moyenne harmonique de Precision et Recall.
-        
-        Donne une vision équilibrée quand les classes sont déséquilibrées
-        """)
-    
-    st.markdown("---")
-    
-    # Guide des features
-    st.markdown("### 📝 Guide des Variables")
-    
-    with st.expander("👤 Démographie"):
-        st.markdown("""
-        - **Gender**: Genre du client (Male/Female)
-        - **Age**: Âge du client en années
-        - **Driving_License**: Permis de conduire (0/1)
-        - **Region_Code**: Code de la région géographique
-        """)
-    
-    with st.expander("🚗 Véhicule"):
-        st.markdown("""
-        - **Vehicle_Age**: Ancienneté du véhicule (< 1 Year, 1-2 Year, > 2 Years)
-        - **Vehicle_Damage**: Antécédents de dommages au véhicule (Yes/No)
-        """)
-    
-    with st.expander("🛡️ Assurance"):
-        st.markdown("""
-        - **Previously_Insured**: Si le client a déjà une assurance véhicule (0/1)
-        - **Annual_Premium**: Montant de la prime d'assurance annuelle
-        """)
-    
-    with st.expander("📞 Marketing"):
-        st.markdown("""
-        - **Policy_Sales_Channel**: Canal de distribution utilisé
-        - **Vintage**: Nombre de jours depuis le premier contact
-        """)
-    
-    st.markdown("---")
-    
-    st.markdown("### 💡 Recommandations")
-    
-    st.markdown("""
-    1. **Seuils de décision:** Ajuster selon les objectifs бизнеса
-    2. **Coûts et bénéfices:** Considérer le coût de contact vs le gain potentiel
-    3. **Mise à jour du modèle:** Retraîner régulièrement avec de nouvelles données
-    4. **Validation:** Utiliser la cross-validation pour des estimations plus robustes
-    """)
 
 # ============================================================================
-# PIED DE PAGE
+# FOOTER
 # ============================================================================
 
 def show_footer():
-    """Affiche le pied de page"""
     st.markdown("---")
     st.markdown("""
-    <div style='text-align: center; padding: 20px; color: #666;'>
-        <p>🏥 <strong>TP2 IIA S6 2025-2026</strong> - Modèles ML d'Ensemble</p>
-        <p style='font-size: 0.9rem;'>Développé par HLDX - Henri Ledoux SAME avec Streamlit</p>
+    <div style='text-align: center; padding: 20px; color: #636e72;'>
+        <p>🚗 <b>TP2 IIA S6 2025-2026</b> - Modèles ML d'Ensemble</p>
     </div>
     """, unsafe_allow_html=True)
 
 # ============================================================================
-# FONCTION PRINCIPALE
+# MAIN
 # ============================================================================
 
 def main():
-    """Fonction principale de l'application"""
+    df, model_type, page = create_sidebar()
     
-    # Créer la sidebar
-    df, model_type, test_size, page = create_sidebar()
-    
-    # Affichage selon la page sélectionnée
     if page == "🏠 Accueil":
         show_homepage()
-    
     elif page == "🔮 Prédiction":
         show_prediction_page(df, model_type)
-    
-    elif page == "📊 Analyse Exploratoire":
+    elif page == "📊 Analyse":
         show_analysis_page(df)
-    
-    elif page == "📈 Performance du Modèle":
-        show_performance_page(df, model_type, test_size)
-    
-    elif page == "🎓 Guide":
+    elif page == "📈 Performance":
+        show_performance_page(df, model_type)
+    elif page == "❓ Guide":
         show_guide_page()
     
     show_footer()
-
 
 if __name__ == "__main__":
     main()
